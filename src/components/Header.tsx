@@ -1,0 +1,117 @@
+import { Link } from "react-router-dom";
+import { ShoppingCart, Search, Menu, X } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const Header = () => {
+  const { totalItems, openCart } = useCart();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 glass">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link to="/" className="font-mono text-xl font-bold tracking-widest text-foreground hover:text-primary transition-colors">
+          LŪMEN<span className="text-primary">.</span>
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-8">
+          <Link to="/products" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            PRODUCTS
+          </Link>
+          <Link to="/products?category=bicycle" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            BICYCLE
+          </Link>
+          <Link to="/products?category=headlamp" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            HEADLAMPS
+          </Link>
+          <Link to="/products?category=flashlight" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            FLASHLIGHTS
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSearchOpen(!searchOpen)}
+            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Search products"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={openCart}
+            className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Open shopping cart"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Search bar */}
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="border-t border-border overflow-hidden"
+          >
+            <div className="container mx-auto px-4 py-3">
+              <input
+                type="text"
+                placeholder="Search products by name, specs, or category..."
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground font-mono text-sm outline-none"
+                autoFocus
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden border-t border-border overflow-hidden"
+          >
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
+              <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
+                ALL PRODUCTS
+              </Link>
+              <Link to="/products?category=bicycle" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
+                BICYCLE
+              </Link>
+              <Link to="/products?category=headlamp" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
+                HEADLAMPS
+              </Link>
+              <Link to="/products?category=flashlight" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
+                FLASHLIGHTS
+              </Link>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
+
+export default Header;
