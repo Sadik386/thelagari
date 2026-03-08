@@ -1,0 +1,182 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { CheckCircle, Package, ArrowRight, Copy, Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+
+interface OrderData {
+  id: string;
+  status: string;
+  total_amount: number;
+  shipping_address: Record<string, string> | null;
+  guest_email: string | null;
+  created_at: string;
+  order_items: {
+    id: string;
+    quantity: number;
+    unit_price: number;
+    products: { name: string; slug: string } | null;
+    product_variants: { variant_name: string } | null;
+  }[];
+}
+
+const OrderConfirmation = () => {
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+  const [order, setOrder] = useState<OrderData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!orderId) { navigate("/"); return; }
+
+    const fetchOrder = async () => {
+      const { data, error } = await supabase
+        .from("orders")
+        .select(`
+          *,
+          order_items(*, products(name, slug), product_variants(variant_name))
+        `)
+        .eq("id", orderId)
+        .single();
+
+      if (error || !data) { navigate("/"); return; }
+      setOrder(data as unknown as OrderData);
+      setLoading(false);
+    };
+
+    fetchOrder();
+  }, [orderId, navigate]);
+
+  const copyOrderId = () => {
+    if (!order) return;
+    navigator.clipboard.writeText(order.id);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!order) return null;
+
+  const addr = order.shipping_address;
+  const orderRef = order.id.slice(0, 8).toUpperCase();
+
+  return (
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-10"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", delay: 0.2, stiffness: 200 }}
+            className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+          >
+            <CheckCircle className="w-10 h-10 text-primary" />
+          </motion.div>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Order Confirmed</h1>
+          <p className="text-muted-foreground text-sm">
+            Thank you for your purchase! Your order is being processed.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-card border border-border rounded-lg overflow-hidden"
+        >
+          {/* Order ID header */}
+          <div className="p-6 border-b border-border flex items-center justify-between">
+            <div>
+              <p className="font-mono text-xs text-muted-foreground tracking-wider">ORDER REFERENCE</p>
+              <p className="font-mono text-lg font-bold text-primary mt-1">#{orderRef}</p>
+            </div>
+            <button
+              onClick={copyOrderId}
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Copy order ID"
+            >
+              {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
+
+          {/* Status */}
+          <div className="p-6 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-sm tracking-wider uppercase">{order.status}</span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Placed on {new Date(order.created_at).toLocaleDateString("en-US", {
+                weekday: "long", year: "numeric", month: "long", day: "numeric",
+              })}
+            </p>
+          </div>
+
+          {/* Items */}
+          <div className="p-6 border-b border-border space-y-4">
+            <p className="font-mono text-xs text-muted-foreground tracking-wider">ITEMS</p>
+            {order.order_items.map((item) => (
+              <div key={item.id} className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm font-semibold">{item.products?.name || "Product"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {item.product_variants?.variant_name || "Standard"} × {item.quantity}
+                  </p>
+                </div>
+                <p className="font-mono text-sm text-primary">
+                  €{(item.unit_price * item.quantity).toFixed(2)}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Shipping */}
+          {addr && (
+            <div className="p-6 border-b border-border">
+              <p className="font-mono text-xs text-muted-foreground tracking-wider mb-2">SHIPPING TO</p>
+              <p className="text-sm">{addr.firstName} {addr.lastName}</p>
+              <p className="text-sm text-muted-foreground">{addr.address}, {addr.city} {addr.postalCode}</p>
+              <p className="text-sm text-muted-foreground">{addr.country}</p>
+            </div>
+          )}
+
+          {/* Total */}
+          <div className="p-6 flex justify-between items-center">
+            <span className="font-mono text-sm text-muted-foreground">TOTAL</span>
+            <span className="font-mono text-xl font-bold text-primary">€{Number(order.total_amount).toFixed(2)}</span>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex flex-col sm:flex-row gap-4 mt-8 justify-center"
+        >
+          <Button variant="outline" asChild className="font-mono tracking-wider text-xs">
+            <Link to="/products"><Package className="w-4 h-4 mr-2" /> CONTINUE SHOPPING</Link>
+          </Button>
+          <Button asChild className="font-mono tracking-wider text-xs">
+            <Link to="/">GO HOME <ArrowRight className="w-4 h-4 ml-2" /></Link>
+          </Button>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default OrderConfirmation;
