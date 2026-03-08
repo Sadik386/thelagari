@@ -19,7 +19,7 @@ const Index = () => {
   const heroGlowRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLElement>(null);
   const featuredRef = useRef<HTMLElement>(null);
-  const ctaRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
