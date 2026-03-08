@@ -1,10 +1,12 @@
 import { X, Minus, Plus, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const CartSidebar = () => {
   const { items, isOpen, closeCart, removeItem, updateQuantity, totalPrice } = useCart();
+  const navigate = useNavigate();
 
   return (
     <AnimatePresence>
@@ -88,7 +90,7 @@ const CartSidebar = () => {
                   <span className="font-mono text-sm text-muted-foreground">TOTAL</span>
                   <span className="font-mono text-lg font-bold text-primary">€{totalPrice.toFixed(2)}</span>
                 </div>
-                <Button className="w-full font-mono tracking-wider" size="lg">
+                <Button className="w-full font-mono tracking-wider" size="lg" onClick={() => { closeCart(); navigate("/checkout"); }}>
                   CHECKOUT <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
