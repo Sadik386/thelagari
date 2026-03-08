@@ -11,6 +11,22 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
+const FieldInput = ({ label, field, value, onChange, placeholder, type = "text", error }: {
+  label: string; field: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string; error?: string;
+}) => (
+  <div className="space-y-1.5">
+    <Label className="font-mono text-xs tracking-wider text-muted-foreground">{label}</Label>
+    <Input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className={`bg-secondary border-border font-mono text-sm ${error ? "border-destructive" : ""}`}
+    />
+    {error && <p className="text-xs text-destructive font-mono">{error}</p>}
+  </div>
+);
+
 const shippingSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
   lastName: z.string().trim().min(1, "Last name is required").max(50),
