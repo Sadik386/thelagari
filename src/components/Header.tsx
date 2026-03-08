@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Menu, X, User, LogOut } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, User, LogOut, ClipboardList } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
@@ -49,13 +49,22 @@ const Header = () => {
           </button>
 
           {user ? (
-            <button
-              onClick={handleSignOut}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Sign out"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            <>
+              <Link
+                to="/orders"
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Order history"
+              >
+                <ClipboardList className="w-5 h-5" />
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Sign out"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </>
           ) : (
             <Link
               to="/auth"
