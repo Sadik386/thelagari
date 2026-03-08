@@ -3,7 +3,8 @@ import { ShoppingCart, Search, Menu, X, User, LogOut, ClipboardList } from "luci
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import ProductSearch from "@/components/ProductSearch";
 
 const Header = () => {
   const { totalItems, openCart } = useCart();
@@ -98,25 +99,7 @@ const Header = () => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {searchOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t border-border overflow-hidden"
-          >
-            <div className="container mx-auto px-4 py-3">
-              <input
-                type="text"
-                placeholder="Search products by name, specs, or category..."
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground font-mono text-sm outline-none"
-                autoFocus
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ProductSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       <AnimatePresence>
         {mobileMenuOpen && (
