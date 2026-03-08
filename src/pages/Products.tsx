@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { products, categories, activities } from "@/data/products";
+import { useProducts, useCategories } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
+
+const activities = ["MTB", "Road Cycling", "E-Bike", "Camping", "Search & Rescue", "Trail Running"];
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,21 +12,24 @@ const Products = () => {
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"name" | "price-asc" | "price-desc" | "lumens">("name");
 
-  const filtered = useMemo(() => {
-    let result = products;
-    if (categoryParam !== "all") {
-      result = result.filter((p) => p.category === categoryParam);
-    }
-    if (selectedActivity) {
-      result = result.filter((p) => p.activity.includes(selectedActivity));
-    }
+  const { data: dbProducts, isLoading } = useProducts(categoryParam, selectedActivity || undefined);
+  const { data: dbCategories } = useCategories();
+
+  const allCategories = [
+    { id: "all", name: "All Products", slug: "all" },
+    ...(dbCategories || []).map((c) => ({ id: c.slug, name: c.name, slug: c.slug })),
+  ];
+
+  const sorted = useMemo(() => {
+    if (!dbProducts) return [];
+    const result = [...dbProducts];
     switch (sortBy) {
-      case "price-asc": return [...result].sort((a, b) => a.basePrice - b.basePrice);
-      case "price-desc": return [...result].sort((a, b) => b.basePrice - a.basePrice);
-      case "lumens": return [...result].sort((a, b) => b.techSpecs.lumens - a.techSpecs.lumens);
-      default: return [...result].sort((a, b) => a.name.localeCompare(b.name));
+      case "price-asc": return result.sort((a, b) => a.base_price - b.base_price);
+      case "price-desc": return result.sort((a, b) => b.base_price - a.base_price);
+      case "lumens": return result.sort((a, b) => ((b.tech_specs as any)?.lumens || 0) - ((a.tech_specs as any)?.lumens || 0));
+      default: return result.sort((a, b) => a.name.localeCompare(b.name));
     }
-  }, [categoryParam, selectedActivity, sortBy]);
+  }, [dbProducts, sortBy]);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -34,11 +39,9 @@ const Products = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-8">Products</h1>
         </motion.div>
 
-        {/* Filters */}
         <div className="space-y-4 mb-10">
-          {/* Category */}
           <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
+            {allCategories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSearchParams(cat.id === "all" ? {} : { category: cat.id })}
@@ -53,7 +56,6 @@ const Products = () => {
             ))}
           </div>
 
-          {/* Activity */}
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedActivity(null)}
@@ -80,7 +82,6 @@ const Products = () => {
             ))}
           </div>
 
-          {/* Sort */}
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs text-muted-foreground">SORT:</span>
             <select
@@ -96,19 +97,27 @@ const Products = () => {
           </div>
         </div>
 
-        {/* Results */}
-        <p className="font-mono text-xs text-muted-foreground mb-6">{filtered.length} PRODUCT{filtered.length !== 1 ? "S" : ""} FOUND</p>
-
-        {filtered.length > 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-card rounded-lg border border-border h-80 animate-pulse" />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-muted-foreground">
-            <p className="font-mono text-sm">NO PRODUCTS MATCH YOUR FILTERS</p>
-          </div>
+          <>
+            <p className="font-mono text-xs text-muted-foreground mb-6">{sorted.length} PRODUCT{sorted.length !== 1 ? "S" : ""} FOUND</p>
+            {sorted.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sorted.map((product, i) => (
+                  <ProductCard key={product.id} product={product} index={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 text-muted-foreground">
+                <p className="font-mono text-sm">NO PRODUCTS MATCH YOUR FILTERS</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
