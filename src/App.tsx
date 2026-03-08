@@ -7,15 +7,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import CartSidebar from "@/components/CartSidebar";
 import BackgroundAnimation from "@/components/BackgroundAnimation";
-import Index from "./pages/Index";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import Auth from "./pages/Auth";
-import Checkout from "./pages/Checkout";
-import OrderConfirmation from "./pages/OrderConfirmation";
-import Orders from "./pages/Orders";
-import ResetPassword from "./pages/ResetPassword";
-import NotFound from "./pages/NotFound";
+import AnimatedRoutes from "./components/AnimatedRoutes";
 
 const queryClient = new QueryClient();
 
