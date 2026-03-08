@@ -153,7 +153,7 @@ const Checkout = () => {
       items.forEach((item) => removeItem(item.product.id, item.variant.id));
 
       toast({ title: "Order placed!", description: `Order #${order.id.slice(0, 8).toUpperCase()} confirmed.` });
-      navigate("/");
+      navigate(`/order/${order.id}`);
     } catch (err: any) {
       toast({ title: "Order failed", description: err.message || "Something went wrong", variant: "destructive" });
     } finally {
