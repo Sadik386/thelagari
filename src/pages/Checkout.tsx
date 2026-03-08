@@ -11,6 +11,22 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
+const FieldInput = ({ label, field, value, onChange, placeholder, type = "text", error }: {
+  label: string; field: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string; error?: string;
+}) => (
+  <div className="space-y-1.5">
+    <Label className="font-mono text-xs tracking-wider text-muted-foreground">{label}</Label>
+    <Input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className={`bg-secondary border-border font-mono text-sm ${error ? "border-destructive" : ""}`}
+    />
+    {error && <p className="text-xs text-destructive font-mono">{error}</p>}
+  </div>
+);
+
 const shippingSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
   lastName: z.string().trim().min(1, "Last name is required").max(50),
@@ -155,22 +171,6 @@ const Checkout = () => {
     if (errors[field]) setErrors((prev) => { const n = { ...prev }; delete n[field]; return n; });
   };
 
-  const FieldInput = ({ label, field, value, onChange, placeholder, type = "text" }: {
-    label: string; field: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string;
-  }) => (
-    <div className="space-y-1.5">
-      <Label className="font-mono text-xs tracking-wider text-muted-foreground">{label}</Label>
-      <Input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className={`bg-secondary border-border font-mono text-sm ${errors[field] ? "border-destructive" : ""}`}
-      />
-      {errors[field] && <p className="text-xs text-destructive font-mono">{errors[field]}</p>}
-    </div>
-  );
-
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -208,15 +208,15 @@ const Checkout = () => {
                   className="bg-card border border-border rounded-lg p-6 space-y-5">
                   <h2 className="font-mono text-sm font-bold tracking-wider">SHIPPING INFORMATION</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FieldInput label="FIRST NAME" field="firstName" value={shipping.firstName} onChange={(v) => updateShipping("firstName", v)} placeholder="John" />
-                    <FieldInput label="LAST NAME" field="lastName" value={shipping.lastName} onChange={(v) => updateShipping("lastName", v)} placeholder="Doe" />
+                    <FieldInput label="FIRST NAME" field="firstName" value={shipping.firstName} onChange={(v) => updateShipping("firstName", v)} placeholder="John" error={errors.firstName} />
+                    <FieldInput label="LAST NAME" field="lastName" value={shipping.lastName} onChange={(v) => updateShipping("lastName", v)} placeholder="Doe" error={errors.lastName} />
                   </div>
-                  <FieldInput label="EMAIL" field="email" value={shipping.email} onChange={(v) => updateShipping("email", v)} placeholder="john@example.com" type="email" />
-                  <FieldInput label="ADDRESS" field="address" value={shipping.address} onChange={(v) => updateShipping("address", v)} placeholder="123 Main Street" />
+                  <FieldInput label="EMAIL" field="email" value={shipping.email} onChange={(v) => updateShipping("email", v)} placeholder="john@example.com" type="email" error={errors.email} />
+                  <FieldInput label="ADDRESS" field="address" value={shipping.address} onChange={(v) => updateShipping("address", v)} placeholder="123 Main Street" error={errors.address} />
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <FieldInput label="CITY" field="city" value={shipping.city} onChange={(v) => updateShipping("city", v)} placeholder="Berlin" />
-                    <FieldInput label="POSTAL CODE" field="postalCode" value={shipping.postalCode} onChange={(v) => updateShipping("postalCode", v)} placeholder="10115" />
-                    <FieldInput label="COUNTRY" field="country" value={shipping.country} onChange={(v) => updateShipping("country", v)} placeholder="Germany" />
+                    <FieldInput label="CITY" field="city" value={shipping.city} onChange={(v) => updateShipping("city", v)} placeholder="Berlin" error={errors.city} />
+                    <FieldInput label="POSTAL CODE" field="postalCode" value={shipping.postalCode} onChange={(v) => updateShipping("postalCode", v)} placeholder="10115" error={errors.postalCode} />
+                    <FieldInput label="COUNTRY" field="country" value={shipping.country} onChange={(v) => updateShipping("country", v)} placeholder="Germany" error={errors.country} />
                   </div>
                 </motion.div>
               )}
@@ -226,11 +226,11 @@ const Checkout = () => {
                   className="bg-card border border-border rounded-lg p-6 space-y-5">
                   <h2 className="font-mono text-sm font-bold tracking-wider">PAYMENT DETAILS</h2>
                   <p className="text-xs text-muted-foreground font-mono">Demo only — no real charges will be made.</p>
-                  <FieldInput label="NAME ON CARD" field="cardName" value={payment.cardName} onChange={(v) => updatePayment("cardName", v)} placeholder="John Doe" />
-                  <FieldInput label="CARD NUMBER" field="cardNumber" value={payment.cardNumber} onChange={(v) => updatePayment("cardNumber", v)} placeholder="4242 4242 4242 4242" />
+                  <FieldInput label="NAME ON CARD" field="cardName" value={payment.cardName} onChange={(v) => updatePayment("cardName", v)} placeholder="John Doe" error={errors.cardName} />
+                  <FieldInput label="CARD NUMBER" field="cardNumber" value={payment.cardNumber} onChange={(v) => updatePayment("cardNumber", v)} placeholder="4242 4242 4242 4242" error={errors.cardNumber} />
                   <div className="grid grid-cols-2 gap-4">
-                    <FieldInput label="EXPIRY" field="expiry" value={payment.expiry} onChange={(v) => updatePayment("expiry", v)} placeholder="MM/YY" />
-                    <FieldInput label="CVC" field="cvc" value={payment.cvc} onChange={(v) => updatePayment("cvc", v)} placeholder="123" />
+                    <FieldInput label="EXPIRY" field="expiry" value={payment.expiry} onChange={(v) => updatePayment("expiry", v)} placeholder="MM/YY" error={errors.expiry} />
+                    <FieldInput label="CVC" field="cvc" value={payment.cvc} onChange={(v) => updatePayment("cvc", v)} placeholder="123" error={errors.cvc} />
                   </div>
                 </motion.div>
               )}
