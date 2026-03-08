@@ -3,24 +3,20 @@ import { motion } from "framer-motion";
 import { ArrowRight, Zap, Shield, Battery } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
-
-const featuredProducts = products.filter((p) => p.isFeatured);
+import { useProducts } from "@/hooks/useProducts";
 
 const Index = () => {
+  const { data: allProducts } = useProducts();
+  const featuredProducts = (allProducts || []).filter((p) => p.is_featured);
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Ambient glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] animate-pulse-glow" />
-        
+
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <p className="font-mono text-xs tracking-[0.3em] text-primary mb-6">ENGINEERED ILLUMINATION</p>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6">
               SEE
@@ -42,17 +38,12 @@ const Index = () => {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-primary/40" />
         </motion.div>
       </section>
 
-      {/* Stats bar */}
+      {/* Stats */}
       <section className="border-y border-border bg-card/50">
         <div className="container mx-auto px-4 py-8 grid grid-cols-3 gap-4">
           {[
@@ -69,7 +60,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* Featured */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="flex items-end justify-between mb-12">
@@ -103,7 +94,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">

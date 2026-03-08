@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
-import { Product } from "@/data/products";
 import { motion } from "framer-motion";
 import { Eye } from "lucide-react";
 import { useState } from "react";
+import type { DbProduct } from "@/hooks/useProducts";
 
 interface ProductCardProps {
-  product: Product;
+  product: DbProduct;
   index?: number;
 }
 
 const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const [hovered, setHovered] = useState(false);
+  const specs = product.tech_specs as Record<string, any>;
 
   return (
     <motion.div
@@ -25,16 +26,18 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         onMouseLeave={() => setHovered(false)}
       >
         <div className="bg-card rounded-lg border border-border overflow-hidden card-hover">
-          {/* Image area */}
           <div className="relative aspect-[4/3] bg-secondary flex items-center justify-center overflow-hidden">
-            <div className="text-center">
-              <p className="font-mono text-4xl font-bold text-muted-foreground/20 group-hover:text-primary/30 transition-colors duration-500">
-                {product.techSpecs.lumens}
-              </p>
-              <p className="font-mono text-xs text-muted-foreground/30 tracking-widest mt-1">LUMENS</p>
-            </div>
-            
-            {/* Quick view overlay */}
+            {product.product_images?.[0]?.url ? (
+              <img src={product.product_images[0].url} alt={product.product_images[0].alt_text || product.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="text-center">
+                <p className="font-mono text-4xl font-bold text-muted-foreground/20 group-hover:text-primary/30 transition-colors duration-500">
+                  {specs.lumens || "—"}
+                </p>
+                <p className="font-mono text-xs text-muted-foreground/30 tracking-widest mt-1">LUMENS</p>
+              </div>
+            )}
+
             <motion.div
               initial={false}
               animate={{ opacity: hovered ? 1 : 0 }}
@@ -46,48 +49,55 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                   <span className="font-mono text-xs tracking-wider">QUICK SPECS</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                  <div className="bg-secondary/50 rounded px-2 py-1.5">
-                    <span className="text-muted-foreground block">Runtime</span>
-                    <span className="text-foreground">{product.techSpecs.runtime.split("/")[0].trim()}</span>
-                  </div>
-                  <div className="bg-secondary/50 rounded px-2 py-1.5">
-                    <span className="text-muted-foreground block">Weight</span>
-                    <span className="text-foreground">{product.techSpecs.weight}</span>
-                  </div>
-                  <div className="bg-secondary/50 rounded px-2 py-1.5">
-                    <span className="text-muted-foreground block">IP Rating</span>
-                    <span className="text-foreground">{product.techSpecs.waterproof}</span>
-                  </div>
-                  <div className="bg-secondary/50 rounded px-2 py-1.5">
-                    <span className="text-muted-foreground block">Charge</span>
-                    <span className="text-foreground">{product.techSpecs.chargingTime}</span>
-                  </div>
+                  {specs.runtime && (
+                    <div className="bg-secondary/50 rounded px-2 py-1.5">
+                      <span className="text-muted-foreground block">Runtime</span>
+                      <span className="text-foreground">{String(specs.runtime).split("/")[0].trim()}</span>
+                    </div>
+                  )}
+                  {specs.weight && (
+                    <div className="bg-secondary/50 rounded px-2 py-1.5">
+                      <span className="text-muted-foreground block">Weight</span>
+                      <span className="text-foreground">{specs.weight}</span>
+                    </div>
+                  )}
+                  {specs.waterproof && (
+                    <div className="bg-secondary/50 rounded px-2 py-1.5">
+                      <span className="text-muted-foreground block">IP Rating</span>
+                      <span className="text-foreground">{specs.waterproof}</span>
+                    </div>
+                  )}
+                  {specs.chargingTime && (
+                    <div className="bg-secondary/50 rounded px-2 py-1.5">
+                      <span className="text-muted-foreground block">Charge</span>
+                      <span className="text-foreground">{specs.chargingTime}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
 
-            {product.isFeatured && (
+            {product.is_featured && (
               <span className="absolute top-3 left-3 font-mono text-[10px] tracking-widest bg-primary text-primary-foreground px-2 py-1 rounded-sm">
                 FEATURED
               </span>
             )}
           </div>
 
-          {/* Info */}
           <div className="p-4 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <h3 className="font-mono text-sm font-bold tracking-wide group-hover:text-primary transition-colors">
                 {product.name}
               </h3>
               <span className="font-mono text-sm font-bold text-primary whitespace-nowrap">
-                €{product.basePrice.toFixed(2)}
+                €{Number(product.base_price).toFixed(2)}
               </span>
             </div>
             <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-              {product.shortDescription}
+              {product.short_description}
             </p>
             <div className="flex gap-1.5 pt-1">
-              {product.activity.slice(0, 3).map((act) => (
+              {(product.activity || []).slice(0, 3).map((act) => (
                 <span key={act} className="text-[10px] font-mono tracking-wider text-muted-foreground bg-secondary px-1.5 py-0.5 rounded-sm">
                   {act.toUpperCase()}
                 </span>

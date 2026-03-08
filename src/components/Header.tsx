@@ -1,13 +1,21 @@
-import { Link } from "react-router-dom";
-import { ShoppingCart, Search, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, Search, Menu, X, User, LogOut } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
   const { totalItems, openCart } = useCart();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
@@ -40,6 +48,24 @@ const Header = () => {
             <Search className="w-5 h-5" />
           </button>
 
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Sign out"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Sign in"
+            >
+              <User className="w-5 h-5" />
+            </Link>
+          )}
+
           <button
             onClick={openCart}
             className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -63,7 +89,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Search bar */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
@@ -84,7 +109,6 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -94,18 +118,13 @@ const Header = () => {
             className="md:hidden border-t border-border overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
-              <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
-                ALL PRODUCTS
-              </Link>
-              <Link to="/products?category=bicycle" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
-                BICYCLE
-              </Link>
-              <Link to="/products?category=headlamp" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
-                HEADLAMPS
-              </Link>
-              <Link to="/products?category=flashlight" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">
-                FLASHLIGHTS
-              </Link>
+              <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">ALL PRODUCTS</Link>
+              <Link to="/products?category=bicycle" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">BICYCLE</Link>
+              <Link to="/products?category=headlamp" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">HEADLAMPS</Link>
+              <Link to="/products?category=flashlight" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">FLASHLIGHTS</Link>
+              {!user && (
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-primary hover:text-foreground transition-colors py-2">SIGN IN</Link>
+              )}
             </nav>
           </motion.div>
         )}
