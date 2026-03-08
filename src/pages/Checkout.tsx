@@ -155,22 +155,6 @@ const Checkout = () => {
     if (errors[field]) setErrors((prev) => { const n = { ...prev }; delete n[field]; return n; });
   };
 
-  const FieldInput = ({ label, field, value, onChange, placeholder, type = "text" }: {
-    label: string; field: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string;
-  }) => (
-    <div className="space-y-1.5">
-      <Label className="font-mono text-xs tracking-wider text-muted-foreground">{label}</Label>
-      <Input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className={`bg-secondary border-border font-mono text-sm ${errors[field] ? "border-destructive" : ""}`}
-      />
-      {errors[field] && <p className="text-xs text-destructive font-mono">{errors[field]}</p>}
-    </div>
-  );
-
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 max-w-4xl">
