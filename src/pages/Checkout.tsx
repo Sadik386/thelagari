@@ -115,12 +115,16 @@ const Checkout = () => {
   const placeOrder = async () => {
     setSubmitting(true);
     try {
+      // Verify current session to avoid stale auth state
+      const { data: { session } } = await supabase.auth.getSession();
+      const currentUserId = session?.user?.id || null;
+
       // Create order
       const { data: order, error: orderErr } = await supabase
         .from("orders")
         .insert({
-          user_id: user?.id || null,
-          guest_email: user ? null : shipping.email,
+          user_id: currentUserId,
+          guest_email: currentUserId ? null : shipping.email,
           total_amount: totalPrice,
           shipping_address: {
             firstName: shipping.firstName,
