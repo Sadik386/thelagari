@@ -46,7 +46,7 @@ const CartSidebar = () => {
                     return (
                       <div key={`${item.product.id}-${item.variant.id}`} className="flex gap-4">
                         <div className="w-20 h-20 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
-                          <span className="font-mono text-xs text-muted-foreground">{item.product.techSpecs.lumens}lm</span>
+                          <span className="font-mono text-xs text-muted-foreground">{item.variant.name}</span>
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-mono text-sm font-semibold truncate">{item.product.name}</h3>
