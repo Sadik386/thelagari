@@ -4,17 +4,17 @@ interface TechSpecsTableProps {
 }
 
 const specLabels: Record<string, string> = {
+  material: "Material",
+  weight: "Fabric Weight",
+  fit: "Fit",
+  care: "Care Instructions",
+  origin: "Made In",
   lumens: "Light Output",
   runtime: "Runtime",
-  weight: "Weight",
   chargingTime: "Charging Time",
   waterproof: "IP Rating",
   beamDistance: "Beam Distance",
   battery: "Battery",
-};
-
-const specUnits: Record<string, string> = {
-  lumens: "lm",
 };
 
 const TechSpecsTable = ({ specs, className = "" }: TechSpecsTableProps) => {
@@ -27,17 +27,10 @@ const TechSpecsTable = ({ specs, className = "" }: TechSpecsTableProps) => {
           {entries.map(([key, value], i) => (
             <tr key={key} className={i % 2 === 0 ? "bg-secondary/30" : ""}>
               <td className="font-mono text-xs tracking-wider text-muted-foreground py-3 px-4 whitespace-nowrap">
-                {specLabels[key] || key}
+                {specLabels[key] || key.charAt(0).toUpperCase() + key.slice(1)}
               </td>
               <td className="font-mono text-sm font-semibold text-foreground py-3 px-4 text-right">
-                {typeof value === "number" ? (
-                  <>
-                    <span className="text-primary">{value.toLocaleString()}</span>
-                    {specUnits[key] && <span className="text-muted-foreground ml-1 text-xs">{specUnits[key]}</span>}
-                  </>
-                ) : (
-                  String(value)
-                )}
+                {String(value)}
               </td>
             </tr>
           ))}

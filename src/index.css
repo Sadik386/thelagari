@@ -42,12 +42,12 @@
     --glow: 24 9% 40% / 0.15;
     --surface-elevated: 0 0% 10%;
     --text-dim: 0 0% 45%;
-    --spec-highlight: 40 100% 50%;
+    --spec-highlight: 24 9% 40%;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 40 100% 50%;
-    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-primary: 24 9% 40%;
+    --sidebar-primary-foreground: 40 20% 95%;
     --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 85%;
     --sidebar-border: 0 0% 16%;

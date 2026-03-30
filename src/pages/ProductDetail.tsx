@@ -28,7 +28,7 @@ const ProductDetail = () => {
         <div className="text-center">
           <p className="font-mono text-sm text-muted-foreground">PRODUCT NOT FOUND</p>
           <Button asChild variant="outline" className="mt-4 font-mono">
-            <Link to="/products"><ArrowLeft className="w-4 h-4 mr-2" /> BACK TO PRODUCTS</Link>
+            <Link to="/products"><ArrowLeft className="w-4 h-4 mr-2" /> BACK TO SHOP</Link>
           </Button>
         </div>
       </div>
@@ -42,7 +42,6 @@ const ProductDetail = () => {
 
   const handleAdd = () => {
     if (!variant) return;
-    // Convert to the cart format
     addItem(
       {
         id: product.id,
@@ -52,7 +51,7 @@ const ProductDetail = () => {
         shortDescription: product.short_description || "",
         longDescription: product.long_description || "",
         techSpecs: specs as any,
-        category: (product.categories?.slug || "bicycle") as any,
+        category: (product.categories?.slug || "t-shirts") as any,
         activity: product.activity || [],
         isFeatured: product.is_featured || false,
         images: product.product_images?.map((i) => i.url) || [],
@@ -80,7 +79,7 @@ const ProductDetail = () => {
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <Link to="/products" className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors mb-8">
-          <ArrowLeft className="w-3 h-3" /> BACK TO PRODUCTS
+          <ArrowLeft className="w-3 h-3" /> BACK TO SHOP
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -90,8 +89,8 @@ const ProductDetail = () => {
                 <img src={product.product_images[0].url} alt={product.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="text-center">
-                  <p className="font-mono text-7xl md:text-8xl font-bold text-muted-foreground/10">{specs.lumens}</p>
-                  <p className="font-mono text-sm tracking-[0.5em] text-muted-foreground/30 mt-2">LUMENS</p>
+                  <p className="font-mono text-5xl md:text-6xl font-bold text-muted-foreground/10">{specs.fit || "—"}</p>
+                  <p className="font-mono text-sm tracking-[0.5em] text-muted-foreground/30 mt-2">{specs.material?.split(",")[0] || "APPAREL"}</p>
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-primary/5 to-transparent" />
@@ -109,40 +108,31 @@ const ProductDetail = () => {
 
             <div className="flex items-baseline gap-3">
               <span className="font-mono text-3xl font-bold text-primary">€{totalPrice.toFixed(2)}</span>
-              {variant && Number(variant.price_modifier || 0) !== 0 && (
-                <span className="font-mono text-sm text-muted-foreground line-through">€{Number(product.base_price).toFixed(2)}</span>
-              )}
             </div>
 
             {variants.length > 0 && (
               <div className="space-y-3">
-                <p className="font-mono text-xs tracking-wider text-muted-foreground">SELECT VARIANT</p>
-                <div className="grid gap-2">
+                <p className="font-mono text-xs tracking-wider text-muted-foreground">SELECT SIZE</p>
+                <div className="flex flex-wrap gap-2">
                   {variants.map((v, i) => (
                     <button
                       key={v.id}
                       onClick={() => setSelectedVariant(i)}
-                      className={`text-left p-3 rounded-md border font-mono text-sm transition-all ${
+                      className={`px-4 py-2 rounded-md border font-mono text-sm transition-all ${
                         i === selectedVariant
                           ? "border-primary bg-primary/5 text-foreground"
                           : "border-border text-muted-foreground hover:border-primary/30"
                       }`}
                     >
-                      <div className="flex justify-between items-center">
-                        <span>{v.variant_name}</span>
-                        <span className="text-xs">
-                          {Number(v.price_modifier || 0) > 0 && `+€${Number(v.price_modifier).toFixed(2)}`}
-                          {Number(v.price_modifier || 0) < 0 && `-€${Math.abs(Number(v.price_modifier)).toFixed(2)}`}
-                          {Number(v.price_modifier || 0) === 0 && "Base price"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between mt-1 text-[10px] text-muted-foreground">
-                        <span>SKU: {v.sku}</span>
-                        <span>{(v.stock_level || 0) > 0 ? `${v.stock_level} in stock` : "OUT OF STOCK"}</span>
-                      </div>
+                      {v.variant_name}
                     </button>
                   ))}
                 </div>
+                {variant && (
+                  <p className="font-mono text-[10px] text-muted-foreground">
+                    {(variant.stock_level || 0) > 0 ? `${variant.stock_level} in stock` : "OUT OF STOCK"}
+                  </p>
+                )}
               </div>
             )}
 
@@ -170,8 +160,8 @@ const ProductDetail = () => {
         </div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="mt-16">
-          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">SPECIFICATIONS</p>
-          <h2 className="text-2xl font-bold mb-6">Technical Data</h2>
+          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">DETAILS</p>
+          <h2 className="text-2xl font-bold mb-6">Product Specs</h2>
           <div className="bg-card rounded-lg border border-border overflow-hidden">
             <TechSpecsTable specs={specs} />
           </div>
