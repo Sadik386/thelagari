@@ -31,10 +31,12 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               <img src={product.product_images[0].url} alt={product.product_images[0].alt_text || product.name} className="w-full h-full object-cover" />
             ) : (
               <div className="text-center">
-                <p className="font-mono text-4xl font-bold text-muted-foreground/20 group-hover:text-primary/30 transition-colors duration-500">
-                  {specs.lumens || "—"}
+                <p className="font-mono text-3xl font-bold text-muted-foreground/20 group-hover:text-primary/30 transition-colors duration-500">
+                  {specs.fit || product.name.split(" ")[0]}
                 </p>
-                <p className="font-mono text-xs text-muted-foreground/30 tracking-widest mt-1">LUMENS</p>
+                <p className="font-mono text-xs text-muted-foreground/30 tracking-widest mt-1">
+                  {specs.material?.split(",")[0] || "APPAREL"}
+                </p>
               </div>
             )}
 
@@ -46,13 +48,19 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               <div className="text-center space-y-3 px-4">
                 <div className="flex items-center justify-center gap-2 text-primary">
                   <Eye className="w-4 h-4" />
-                  <span className="font-mono text-xs tracking-wider">QUICK SPECS</span>
+                  <span className="font-mono text-xs tracking-wider">QUICK DETAILS</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                  {specs.runtime && (
+                  {specs.material && (
                     <div className="bg-secondary/50 rounded px-2 py-1.5">
-                      <span className="text-muted-foreground block">Runtime</span>
-                      <span className="text-foreground">{String(specs.runtime).split("/")[0].trim()}</span>
+                      <span className="text-muted-foreground block">Material</span>
+                      <span className="text-foreground text-[10px]">{String(specs.material).split(",")[0]}</span>
+                    </div>
+                  )}
+                  {specs.fit && (
+                    <div className="bg-secondary/50 rounded px-2 py-1.5">
+                      <span className="text-muted-foreground block">Fit</span>
+                      <span className="text-foreground">{specs.fit}</span>
                     </div>
                   )}
                   {specs.weight && (
@@ -61,16 +69,10 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                       <span className="text-foreground">{specs.weight}</span>
                     </div>
                   )}
-                  {specs.waterproof && (
+                  {specs.origin && (
                     <div className="bg-secondary/50 rounded px-2 py-1.5">
-                      <span className="text-muted-foreground block">IP Rating</span>
-                      <span className="text-foreground">{specs.waterproof}</span>
-                    </div>
-                  )}
-                  {specs.chargingTime && (
-                    <div className="bg-secondary/50 rounded px-2 py-1.5">
-                      <span className="text-muted-foreground block">Charge</span>
-                      <span className="text-foreground">{specs.chargingTime}</span>
+                      <span className="text-muted-foreground block">Origin</span>
+                      <span className="text-foreground text-[10px]">{specs.origin}</span>
                     </div>
                   )}
                 </div>

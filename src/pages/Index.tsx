@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, Shield, Battery } from "lucide-react";
+import { ArrowRight, Truck, Shield, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { useProducts } from "@/hooks/useProducts";
@@ -23,7 +23,6 @@ const Index = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero parallax: text moves up slower, glow scales down
       gsap.to(heroTextRef.current, {
         y: -120,
         opacity: 0.2,
@@ -49,7 +48,6 @@ const Index = () => {
         },
       });
 
-      // Stats: stagger in from below
       if (statsRef.current) {
         gsap.from(statsRef.current.querySelectorAll(".stat-item"), {
           y: 40,
@@ -57,24 +55,17 @@ const Index = () => {
           stagger: 0.15,
           duration: 0.8,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
-          },
+          scrollTrigger: { trigger: statsRef.current, start: "top 85%" },
         });
       }
 
-      // Featured section
       if (featuredRef.current) {
         gsap.from(featuredRef.current.querySelector(".featured-heading"), {
           x: -60,
           opacity: 0,
           duration: 0.8,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: featuredRef.current,
-            start: "top 80%",
-          },
+          scrollTrigger: { trigger: featuredRef.current, start: "top 80%" },
         });
 
         gsap.from(featuredRef.current.querySelectorAll(".product-card-wrapper"), {
@@ -83,14 +74,10 @@ const Index = () => {
           stagger: 0.12,
           duration: 0.7,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: featuredRef.current,
-            start: "top 70%",
-          },
+          scrollTrigger: { trigger: featuredRef.current, start: "top 70%" },
         });
       }
 
-      // CTA parallax
       if (ctaRef.current) {
         gsap.from(ctaRef.current.children, {
           y: 50,
@@ -98,10 +85,7 @@ const Index = () => {
           stagger: 0.1,
           duration: 0.8,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: ctaRef.current,
-            start: "top 85%",
-          },
+          scrollTrigger: { trigger: ctaRef.current, start: "top 85%" },
         });
       }
     });
@@ -120,22 +104,22 @@ const Index = () => {
 
         <div ref={heroTextRef} className="container mx-auto px-4 text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <p className="font-mono text-xs tracking-[0.3em] text-primary mb-6">ENGINEERED ILLUMINATION</p>
+            <p className="font-mono text-xs tracking-[0.3em] text-primary mb-6">CASUAL ESSENTIALS</p>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6">
-              SEE
-              <span className="block text-gradient">EVERYTHING.</span>
+              WEAR
+              <span className="block text-gradient">YOUR WAY.</span>
             </h1>
             <p className="max-w-lg mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed mb-10">
-              Professional lighting systems engineered for extreme conditions. From 650 to 4,500 lumens.
+              Everyday clothing crafted from premium materials. Comfortable, sustainable, and effortlessly stylish.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="font-mono tracking-wider px-8">
                 <Link to="/products">
-                  EXPLORE PRODUCTS <ArrowRight className="w-4 h-4 ml-2" />
+                  SHOP NOW <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="font-mono tracking-wider px-8">
-                <Link to="/products?category=bicycle">BICYCLE LIGHTS</Link>
+                <Link to="/products?category=t-shirts">NEW ARRIVALS</Link>
               </Button>
             </div>
           </motion.div>
@@ -150,9 +134,9 @@ const Index = () => {
       <section ref={statsRef} className="border-y border-border bg-card/50">
         <div className="container mx-auto px-4 py-8 grid grid-cols-3 gap-4">
           {[
-            { icon: Zap, label: "MAX OUTPUT", value: "4,500 lm" },
-            { icon: Shield, label: "IP RATING", value: "IP68" },
-            { icon: Battery, label: "MAX RUNTIME", value: "48h" },
+            { icon: Leaf, label: "MATERIALS", value: "Organic" },
+            { icon: Truck, label: "SHIPPING", value: "Free 50€+" },
+            { icon: Shield, label: "RETURNS", value: "30 Days" },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="stat-item text-center">
               <Icon className="w-5 h-5 mx-auto mb-2 text-primary" />
@@ -169,7 +153,7 @@ const Index = () => {
           <div className="featured-heading flex items-end justify-between mb-12">
             <div>
               <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">FEATURED</p>
-              <h2 className="text-3xl md:text-4xl font-bold">Top Performers</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">Staff Picks</h2>
             </div>
             <Link to="/products" className="font-mono text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
               VIEW ALL <ArrowRight className="w-3 h-3" />
@@ -188,13 +172,13 @@ const Index = () => {
       {/* CTA */}
       <section className="py-20 border-t border-border">
         <div ref={ctaRef} className="container mx-auto px-4 text-center">
-          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-4">PROFESSIONAL GRADE</p>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Built for the Dark</h2>
+          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-4">SUSTAINABLY MADE</p>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Comfort Meets Craft</h2>
           <p className="text-muted-foreground max-w-md mx-auto mb-8">
-            Every unit is CNC-machined, thermally managed, and tested to military standards.
+            Every piece is made from responsibly sourced materials with quality construction that lasts.
           </p>
           <Button asChild size="lg" className="font-mono tracking-wider">
-            <Link to="/products">SHOP NOW <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            <Link to="/products">EXPLORE COLLECTION <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>
       </section>
@@ -202,8 +186,8 @@ const Index = () => {
       <footer className="border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="font-mono text-sm font-bold tracking-widest">LŪMEN<span className="text-primary">.</span></p>
-            <p className="font-mono text-xs text-muted-foreground">© 2026 LŪMEN LIGHTING SYSTEMS. ALL RIGHTS RESERVED.</p>
+            <p className="text-sm font-bold tracking-widest uppercase">The Lagari<span className="text-primary">.</span></p>
+            <p className="font-mono text-xs text-muted-foreground">© 2026 THE LAGARI. ALL RIGHTS RESERVED.</p>
           </div>
         </div>
       </footer>

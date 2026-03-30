@@ -21,22 +21,25 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="font-mono text-xl font-bold tracking-widest text-foreground hover:text-primary transition-colors">
-          LŪMEN<span className="text-primary">.</span>
+        <Link to="/" className="text-xl font-bold tracking-widest text-foreground hover:text-primary transition-colors uppercase">
+          The Lagari<span className="text-primary">.</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/products" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-            PRODUCTS
+            SHOP ALL
           </Link>
-          <Link to="/products?category=bicycle" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-            BICYCLE
+          <Link to="/products?category=t-shirts" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            T-SHIRTS
           </Link>
-          <Link to="/products?category=headlamp" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-            HEADLAMPS
+          <Link to="/products?category=hoodies" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            HOODIES
           </Link>
-          <Link to="/products?category=flashlight" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-            FLASHLIGHTS
+          <Link to="/products?category=pants" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            PANTS
+          </Link>
+          <Link to="/products?category=jackets" className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+            JACKETS
           </Link>
         </nav>
 
@@ -110,10 +113,11 @@ const Header = () => {
             className="md:hidden border-t border-border overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
-              <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">ALL PRODUCTS</Link>
-              <Link to="/products?category=bicycle" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">BICYCLE</Link>
-              <Link to="/products?category=headlamp" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">HEADLAMPS</Link>
-              <Link to="/products?category=flashlight" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">FLASHLIGHTS</Link>
+              <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">SHOP ALL</Link>
+              <Link to="/products?category=t-shirts" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">T-SHIRTS</Link>
+              <Link to="/products?category=hoodies" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">HOODIES</Link>
+              <Link to="/products?category=pants" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">PANTS</Link>
+              <Link to="/products?category=jackets" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">JACKETS</Link>
               {!user && (
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-primary hover:text-foreground transition-colors py-2">SIGN IN</Link>
               )}

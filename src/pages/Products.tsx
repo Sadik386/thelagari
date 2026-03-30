@@ -4,15 +4,15 @@ import { motion } from "framer-motion";
 import { useProducts, useCategories } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 
-const activities = ["MTB", "Road Cycling", "E-Bike", "Camping", "Search & Rescue", "Trail Running"];
+const styles = ["Casual", "Streetwear", "Loungewear", "Activewear", "Smart Casual", "Everyday", "Outdoor"];
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") || "all";
-  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<"name" | "price-asc" | "price-desc" | "lumens">("name");
+  const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"name" | "price-asc" | "price-desc">("name");
 
-  const { data: dbProducts, isLoading } = useProducts(categoryParam, selectedActivity || undefined);
+  const { data: dbProducts, isLoading } = useProducts(categoryParam, selectedStyle || undefined);
   const { data: dbCategories } = useCategories();
 
   const allCategories = [
@@ -26,7 +26,6 @@ const Products = () => {
     switch (sortBy) {
       case "price-asc": return result.sort((a, b) => a.base_price - b.base_price);
       case "price-desc": return result.sort((a, b) => b.base_price - a.base_price);
-      case "lumens": return result.sort((a, b) => ((b.tech_specs as any)?.lumens || 0) - ((a.tech_specs as any)?.lumens || 0));
       default: return result.sort((a, b) => a.name.localeCompare(b.name));
     }
   }, [dbProducts, sortBy]);
@@ -35,8 +34,8 @@ const Products = () => {
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">CATALOG</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-8">Products</h1>
+          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">COLLECTION</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-8">Shop</h1>
         </motion.div>
 
         <div className="space-y-4 mb-10">
@@ -58,26 +57,26 @@ const Products = () => {
 
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setSelectedActivity(null)}
+              onClick={() => setSelectedStyle(null)}
               className={`font-mono text-[10px] tracking-wider px-3 py-1.5 rounded-sm border transition-all ${
-                !selectedActivity
+                !selectedStyle
                   ? "bg-accent text-accent-foreground border-accent"
                   : "bg-transparent text-muted-foreground border-border hover:text-foreground"
               }`}
             >
-              ALL ACTIVITIES
+              ALL STYLES
             </button>
-            {activities.map((act) => (
+            {styles.map((style) => (
               <button
-                key={act}
-                onClick={() => setSelectedActivity(selectedActivity === act ? null : act)}
+                key={style}
+                onClick={() => setSelectedStyle(selectedStyle === style ? null : style)}
                 className={`font-mono text-[10px] tracking-wider px-3 py-1.5 rounded-sm border transition-all ${
-                  selectedActivity === act
+                  selectedStyle === style
                     ? "bg-accent text-accent-foreground border-accent"
                     : "bg-transparent text-muted-foreground border-border hover:text-foreground"
                 }`}
               >
-                {act.toUpperCase()}
+                {style.toUpperCase()}
               </button>
             ))}
           </div>
@@ -92,7 +91,6 @@ const Products = () => {
               <option value="name">Name</option>
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
-              <option value="lumens">Lumens: High → Low</option>
             </select>
           </div>
         </div>
