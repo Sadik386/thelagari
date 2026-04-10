@@ -1,0 +1,41 @@
+# Docker Deployment
+# Build and run both client and server using Docker
+
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - server
+    networks:
+      - lumina-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=production
+      - CLIENT_URL=http://localhost
+    networks:
+      - lumina-network
+    volumes:
+      - server-uploads:/app/uploads
+
+networks:
+  lumina-network:
+    driver: bridge
+
+volumes:
+  server-uploads:
