@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(npx supabase:*)",
+      "Bash(grep -E \"^[^/]*\\(/[^/]*\\){0,4}$\")",
+      "Bash(npm install:*)"
+    ]
+  }
+}

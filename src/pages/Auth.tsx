@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, LogIn, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -9,38 +9,55 @@ import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { user, loading, signIn, signUp } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, loading, navigate]);
+
+  // Show loading state while checking auth status
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
+        <div className="text-center">
+          <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">LOADING</p>
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the form if user is already logged in (will redirect)
+  if (user) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        await signIn(email, password);
         toast.success("Logged in successfully");
         navigate("/");
       } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: { display_name: displayName },
-            emailRedirectTo: window.location.origin,
-          },
-        });
-        if (error) throw error;
-        toast.success("Account created! Check your email to confirm.");
+        await signUp(email, password, displayName);
+        toast.success("Account created successfully!");
+        navigate("/");
       }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -95,36 +112,14 @@ const Auth = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full font-mono tracking-wider" size="lg" disabled={loading}>
-            {loading ? "LOADING..." : isLogin ? (
+          <Button type="submit" className="w-full font-mono tracking-wider" size="lg" disabled={submitting}>
+            {submitting ? "LOADING..." : isLogin ? (
               <><LogIn className="w-4 h-4 mr-2" /> SIGN IN</>
             ) : (
               <><UserPlus className="w-4 h-4 mr-2" /> CREATE ACCOUNT</>
             )}
           </Button>
         </form>
-
-        {isLogin && (
-          <div className="text-center mt-4">
-            <button
-              type="button"
-              onClick={async () => {
-                if (!email) {
-                  toast.error("Enter your email first");
-                  return;
-                }
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                  redirectTo: `${window.location.origin}/reset-password`,
-                });
-                if (error) toast.error(error.message);
-                else toast.success("Password reset link sent to your email!");
-              }}
-              className="text-xs text-muted-foreground hover:text-primary transition-colors font-mono"
-            >
-              Forgot password?
-            </button>
-          </div>
-        )}
 
         <p className="text-center mt-4 text-sm text-muted-foreground">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}

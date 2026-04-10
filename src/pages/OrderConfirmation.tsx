@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CheckCircle, Package, ArrowRight, Copy, Check } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface OrderData {
@@ -31,22 +31,9 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (!orderId) { navigate("/"); return; }
 
-    const fetchOrder = async () => {
-      const { data, error } = await supabase
-        .from("orders")
-        .select(`
-          *,
-          order_items(*, products(name, slug), product_variants(variant_name))
-        `)
-        .eq("id", orderId)
-        .single();
-
-      if (error || !data) { navigate("/"); return; }
-      setOrder(data as unknown as OrderData);
-      setLoading(false);
-    };
-
-    fetchOrder();
+    api.get<OrderData>(`/orders/${orderId}`)
+      .then((data) => { setOrder(data); setLoading(false); })
+      .catch(() => navigate("/"));
   }, [orderId, navigate]);
 
   const copyOrderId = () => {
@@ -98,7 +85,6 @@ const OrderConfirmation = () => {
           transition={{ delay: 0.3 }}
           className="bg-card border border-border rounded-lg overflow-hidden"
         >
-          {/* Order ID header */}
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div>
               <p className="font-mono text-xs text-muted-foreground tracking-wider">ORDER REFERENCE</p>
@@ -113,7 +99,6 @@ const OrderConfirmation = () => {
             </button>
           </div>
 
-          {/* Status */}
           <div className="p-6 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
@@ -126,7 +111,6 @@ const OrderConfirmation = () => {
             </p>
           </div>
 
-          {/* Items */}
           <div className="p-6 border-b border-border space-y-4">
             <p className="font-mono text-xs text-muted-foreground tracking-wider">ITEMS</p>
             {order.order_items.map((item) => (
@@ -144,7 +128,6 @@ const OrderConfirmation = () => {
             ))}
           </div>
 
-          {/* Shipping */}
           {addr && (
             <div className="p-6 border-b border-border">
               <p className="font-mono text-xs text-muted-foreground tracking-wider mb-2">SHIPPING TO</p>
@@ -154,7 +137,6 @@ const OrderConfirmation = () => {
             </div>
           )}
 
-          {/* Total */}
           <div className="p-6 flex justify-between items-center">
             <span className="font-mono text-sm text-muted-foreground">TOTAL</span>
             <span className="font-mono text-xl font-bold text-primary">€{Number(order.total_amount).toFixed(2)}</span>

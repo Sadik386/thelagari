@@ -1,0 +1,48 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "TheLagari." [ref=e5] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - link "SHOP ALL" [ref=e7] [cursor=pointer]:
+          - /url: /products
+        - link "T-SHIRTS" [ref=e8] [cursor=pointer]:
+          - /url: /products?category=t-shirts
+        - link "HOODIES" [ref=e9] [cursor=pointer]:
+          - /url: /products?category=hoodies
+        - link "PANTS" [ref=e10] [cursor=pointer]:
+          - /url: /products?category=pants
+        - link "JACKETS" [ref=e11] [cursor=pointer]:
+          - /url: /products?category=jackets
+      - generic [ref=e12]:
+        - button "Search products" [ref=e13] [cursor=pointer]:
+          - img [ref=e14]
+        - link "Sign in" [ref=e17] [cursor=pointer]:
+          - /url: /auth
+          - img [ref=e18]
+        - button "Open shopping cart" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+  - generic [ref=e28]:
+    - generic [ref=e29]:
+      - paragraph [ref=e30]: COLLECTION
+      - heading "Shop" [level=1] [ref=e31]
+    - generic [ref=e32]:
+      - button "ALL PRODUCTS" [ref=e34] [cursor=pointer]
+      - generic [ref=e35]:
+        - button "ALL STYLES" [ref=e36] [cursor=pointer]
+        - button "CASUAL" [ref=e37] [cursor=pointer]
+        - button "STREETWEAR" [ref=e38] [cursor=pointer]
+        - button "LOUNGEWEAR" [ref=e39] [cursor=pointer]
+        - button "ACTIVEWEAR" [ref=e40] [cursor=pointer]
+        - button "SMART CASUAL" [ref=e41] [cursor=pointer]
+        - button "EVERYDAY" [ref=e42] [cursor=pointer]
+        - button "OUTDOOR" [ref=e43] [cursor=pointer]
+      - generic [ref=e44]:
+        - generic [ref=e45]: "SORT:"
+        - combobox [ref=e46]:
+          - option "Name" [selected]
+          - 'option "Price: Low → High"'
+          - 'option "Price: High → Low"'

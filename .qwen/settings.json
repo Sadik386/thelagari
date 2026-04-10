@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__browser_navigate",
+      "Bash(taskkill *)",
+      "Bash(netstat *)",
+      "Bash(findstr *)",
+      "Bash(node *)",
+      "Bash(npm install *)",
+      "Bash(npx *)",
+      "Bash(npm run *)",
+      "Bash(tasklist *)",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_evaluate"
+    ]
+  },
+  "$version": 3
+}

@@ -1,0 +1,2 @@
+[POST] http://localhost:5000/api/auth/login => [200] OK
+[GET] http://localhost:5000/api/products => [200] OK

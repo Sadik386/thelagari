@@ -11,8 +11,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Index = () => {
-  const { data: allProducts } = useProducts();
+  const { data: allProducts, isLoading } = useProducts();
   const featuredProducts = (allProducts || []).filter((p) => p.is_featured);
+
+  console.log('Index page - allProducts:', allProducts);
+  console.log('Index page - isLoading:', isLoading);
+  console.log('Index page - featuredProducts:', featuredProducts);
 
   const heroRef = useRef<HTMLElement>(null);
   const heroTextRef = useRef<HTMLDivElement>(null);
@@ -23,62 +27,76 @@ const Index = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.to(heroTextRef.current, {
-        y: -120,
-        opacity: 0.2,
-        scale: 0.95,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      // Hero animations - only if refs exist
+      if (heroRef.current && heroTextRef.current) {
+        gsap.to(heroTextRef.current, {
+          y: -120,
+          opacity: 0.2,
+          scale: 0.95,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
 
-      gsap.to(heroGlowRef.current, {
-        scale: 1.8,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      if (heroRef.current && heroGlowRef.current) {
+        gsap.to(heroGlowRef.current, {
+          scale: 1.8,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
 
       if (statsRef.current) {
-        gsap.from(statsRef.current.querySelectorAll(".stat-item"), {
-          y: 40,
-          opacity: 0,
-          stagger: 0.15,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: statsRef.current, start: "top 85%" },
-        });
+        const statItems = statsRef.current.querySelectorAll(".stat-item");
+        if (statItems.length > 0) {
+          gsap.from(statItems, {
+            y: 40,
+            opacity: 0,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: { trigger: statsRef.current, start: "top 85%" },
+          });
+        }
       }
 
       if (featuredRef.current) {
-        gsap.from(featuredRef.current.querySelector(".featured-heading"), {
-          x: -60,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: featuredRef.current, start: "top 80%" },
-        });
+        const featuredHeading = featuredRef.current.querySelector(".featured-heading");
+        if (featuredHeading) {
+          gsap.from(featuredHeading, {
+            x: -60,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: { trigger: featuredRef.current, start: "top 80%" },
+          });
+        }
 
-        gsap.from(featuredRef.current.querySelectorAll(".product-card-wrapper"), {
-          y: 80,
-          opacity: 0,
-          stagger: 0.12,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: { trigger: featuredRef.current, start: "top 70%" },
-        });
+        const productCards = featuredRef.current.querySelectorAll(".product-card-wrapper");
+        if (productCards.length > 0) {
+          gsap.from(productCards, {
+            y: 80,
+            opacity: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: "power2.out",
+            scrollTrigger: { trigger: featuredRef.current, start: "top 70%" },
+          });
+        }
       }
 
-      if (ctaRef.current) {
+      if (ctaRef.current && ctaRef.current.children.length > 0) {
         gsap.from(ctaRef.current.children, {
           y: 50,
           opacity: 0,
@@ -91,7 +109,7 @@ const Index = () => {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [allProducts]);
 
   return (
     <div className="min-h-screen">
@@ -103,16 +121,58 @@ const Index = () => {
         />
 
         <div ref={heroTextRef} className="container mx-auto px-4 text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <p className="font-mono text-xs tracking-[0.3em] text-primary mb-6">CASUAL ESSENTIALS</p>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { 
+                opacity: 1,
+                transition: { 
+                  staggerChildren: 0.2,
+                  delayChildren: 0.3
+                }
+              }
+            }}
+          >
+            <motion.p 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              className="font-mono text-xs tracking-[0.3em] text-primary mb-6"
+            >
+              CASUAL ESSENTIALS
+            </motion.p>
+
+            <motion.h1 
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
+              }}
+              className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6"
+            >
               WEAR
               <span className="block text-gradient">YOUR WAY.</span>
-            </h1>
-            <p className="max-w-lg mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed mb-10">
+            </motion.h1>
+
+            <motion.p 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              className="max-w-lg mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed mb-10"
+            >
               Everyday clothing crafted from premium materials. Comfortable, sustainable, and effortlessly stylish.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            </motion.p>
+
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
               <Button asChild size="lg" className="font-mono tracking-wider px-8">
                 <Link to="/products">
                   SHOP NOW <ArrowRight className="w-4 h-4 ml-2" />
@@ -121,7 +181,7 @@ const Index = () => {
               <Button asChild variant="outline" size="lg" className="font-mono tracking-wider px-8">
                 <Link to="/products?category=t-shirts">NEW ARRIVALS</Link>
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 
@@ -159,13 +219,26 @@ const Index = () => {
               VIEW ALL <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProducts.map((product, i) => (
-              <div key={product.id} className="product-card-wrapper">
-                <ProductCard product={product} index={i} />
-              </div>
-            ))}
-          </div>
+          
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-card rounded-lg border border-border h-80 animate-pulse" />
+              ))}
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredProducts.map((product, i) => (
+                <div key={product.id} className="product-card-wrapper">
+                  <ProductCard product={product} index={i} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20 text-muted-foreground">
+              <p className="font-mono text-sm">NO FEATURED PRODUCTS AVAILABLE</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -186,8 +259,8 @@ const Index = () => {
       <footer className="border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm font-bold tracking-widest uppercase">The Lagari<span className="text-primary">.</span></p>
-            <p className="font-mono text-xs text-muted-foreground">© 2026 THE LAGARI. ALL RIGHTS RESERVED.</p>
+            <p className="text-sm font-bold tracking-widest uppercase">TheLagari<span className="text-primary">.</span></p>
+            <p className="font-mono text-xs text-muted-foreground">© 2026 THELAGARI. ALL RIGHTS RESERVED.</p>
           </div>
         </div>
       </footer>

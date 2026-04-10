@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Menu, X, User, LogOut, ClipboardList } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, User, LogOut, ClipboardList, LayoutDashboard } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
@@ -13,6 +13,14 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const adminEmails = ["mdsiam386siam@gmail.com", "test@example.com"];
+  const isAdmin = user && adminEmails.map(e => e.toLowerCase()).includes(user?.email?.toLowerCase() || "");
+
+  // Debug admin status
+  if (user) {
+    console.log("Logged in user:", user.email, "Is Admin:", isAdmin);
+  }
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
@@ -22,7 +30,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="text-xl font-bold tracking-widest text-foreground hover:text-primary transition-colors uppercase">
-          The Lagari<span className="text-primary">.</span>
+          TheLagari<span className="text-primary">.</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -54,6 +62,15 @@ const Header = () => {
 
           {user ? (
             <>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Admin Dashboard"
+                >
+                  <LayoutDashboard className="w-5 h-5" />
+                </Link>
+              )}
               <Link
                 to="/orders"
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -118,6 +135,9 @@ const Header = () => {
               <Link to="/products?category=hoodies" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">HOODIES</Link>
               <Link to="/products?category=pants" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">PANTS</Link>
               <Link to="/products?category=jackets" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors py-2">JACKETS</Link>
+              {isAdmin && (
+                <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-primary hover:text-foreground transition-colors py-2 uppercase font-bold">ADMIN DASHBOARD</Link>
+              )}
               {!user && (
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium tracking-wide text-primary hover:text-foreground transition-colors py-2">SIGN IN</Link>
               )}

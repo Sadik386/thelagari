@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
 import { Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -37,13 +37,12 @@ const ProductSearch = ({ open, onClose }: { open: boolean; onClose: () => void }
 
     const timeout = setTimeout(async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, slug, base_price, short_description, product_images(url, alt_text, display_order)")
-        .ilike("name", `%${query}%`)
-        .limit(6);
-
-      setResults((data as unknown as SearchResult[]) ?? []);
+      try {
+        const data = await api.get<SearchResult[]>(`/products?search=${encodeURIComponent(query)}`);
+        setResults(data.slice(0, 6));
+      } catch {
+        setResults([]);
+      }
       setLoading(false);
     }, 250);
 

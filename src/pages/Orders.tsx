@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Package, ChevronRight, ShoppingBag } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
@@ -30,18 +30,10 @@ const Orders = () => {
     if (authLoading) return;
     if (!user) { navigate("/auth"); return; }
 
-    const fetch = async () => {
-      const { data, error } = await supabase
-        .from("orders")
-        .select(`*, order_items(*, products(name), product_variants(variant_name))`)
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (!error && data) setOrders(data as unknown as OrderRow[]);
-      setLoading(false);
-    };
-
-    fetch();
+    api.get<OrderRow[]>("/orders/my-orders")
+      .then(setOrders)
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [user, authLoading, navigate]);
 
   if (authLoading || loading) {

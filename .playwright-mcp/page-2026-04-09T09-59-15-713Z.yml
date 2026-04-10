@@ -1,0 +1,56 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e58]:
+        - img [ref=e60]
+        - generic [ref=e63]: Invalid email or password
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "TheLagari." [ref=e5] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - link "SHOP ALL" [ref=e7] [cursor=pointer]:
+          - /url: /products
+        - link "T-SHIRTS" [ref=e8] [cursor=pointer]:
+          - /url: /products?category=t-shirts
+        - link "HOODIES" [ref=e9] [cursor=pointer]:
+          - /url: /products?category=hoodies
+        - link "PANTS" [ref=e10] [cursor=pointer]:
+          - /url: /products?category=pants
+        - link "JACKETS" [ref=e11] [cursor=pointer]:
+          - /url: /products?category=jackets
+      - generic [ref=e12]:
+        - button "Search products" [ref=e13] [cursor=pointer]:
+          - img [ref=e14]
+        - link "Admin Dashboard" [ref=e44] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e45]
+        - link "Order history" [ref=e50] [cursor=pointer]:
+          - /url: /orders
+          - img [ref=e51]
+        - button "Sign out" [ref=e54] [cursor=pointer]:
+          - img [ref=e55]
+        - button "Open shopping cart" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+  - generic [ref=e28]:
+    - link "BACK" [ref=e29] [cursor=pointer]:
+      - /url: /
+      - img [ref=e30]
+      - text: BACK
+    - paragraph [ref=e32]: WELCOME BACK
+    - heading "Sign In" [level=1] [ref=e33]
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]: EMAIL
+        - textbox [ref=e37]: user@example.com
+      - generic [ref=e38]:
+        - generic [ref=e39]: PASSWORD
+        - textbox [ref=e40]: password123
+      - button "SIGN IN" [ref=e41] [cursor=pointer]:
+        - img
+        - text: SIGN IN
+    - paragraph [ref=e42]:
+      - text: Don't have an account?
+      - button "Sign up" [ref=e43] [cursor=pointer]

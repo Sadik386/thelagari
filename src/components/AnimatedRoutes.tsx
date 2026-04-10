@@ -10,6 +10,7 @@ import OrderConfirmation from "@/pages/OrderConfirmation";
 import Auth from "@/pages/Auth";
 import ResetPassword from "@/pages/ResetPassword";
 import NotFound from "@/pages/NotFound";
+import Admin from "@/pages/Admin";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const AnimatedRoutes = () => {
         <Route path="/order/:orderId" element={<PageTransition><OrderConfirmation /></PageTransition>} />
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
         <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+        <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>

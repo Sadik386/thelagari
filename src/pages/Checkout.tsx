@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Package, CreditCard, ClipboardList } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,47 +115,30 @@ const Checkout = () => {
   const placeOrder = async () => {
     setSubmitting(true);
     try {
-      // Verify current session to avoid stale auth state
-      const { data: { session } } = await supabase.auth.getSession();
-      const currentUserId = session?.user?.id || null;
-
-      // Create order
-      const { data: order, error: orderErr } = await supabase
-        .from("orders")
-        .insert({
-          user_id: currentUserId,
-          guest_email: currentUserId ? null : shipping.email,
-          total_amount: totalPrice,
-          shipping_address: {
-            firstName: shipping.firstName,
-            lastName: shipping.lastName,
-            address: shipping.address,
-            city: shipping.city,
-            postalCode: shipping.postalCode,
-            country: shipping.country,
-          },
-          status: "confirmed",
-        })
-        .select("id")
-        .single();
-
-      if (orderErr) throw orderErr;
-
-      // Create order items
       const orderItems = items.map((item) => ({
-        order_id: order.id,
         product_id: item.product.id,
         variant_id: item.variant.id,
         quantity: item.quantity,
         unit_price: item.product.basePrice + item.variant.priceModifier,
+        product_name: item.product.name,
+        variant_name: item.variant.name,
       }));
 
-      const { error: itemsErr } = await supabase.from("order_items").insert(orderItems);
-      if (itemsErr) throw itemsErr;
+      const order = await api.post<{ id: string }>("/orders", {
+        items: orderItems,
+        total_amount: totalPrice,
+        shipping_address: {
+          firstName: shipping.firstName,
+          lastName: shipping.lastName,
+          address: shipping.address,
+          city: shipping.city,
+          postalCode: shipping.postalCode,
+          country: shipping.country,
+        },
+        guest_email: user ? null : shipping.email,
+      });
 
-      // Clear cart
       items.forEach((item) => removeItem(item.product.id, item.variant.id));
-
       toast({ title: "Order placed!", description: `Order #${order.id.slice(0, 8).toUpperCase()} confirmed.` });
       navigate(`/order/${order.id}`);
     } catch (err: any) {
@@ -178,13 +161,11 @@ const Checkout = () => {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <p className="font-mono text-xs tracking-[0.3em] text-primary mb-2">CHECKOUT</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-8">Complete Your Order</h1>
         </motion.div>
 
-        {/* Step indicator */}
         <div className="flex items-center justify-between mb-10 max-w-md">
           {steps.map((s, i) => (
             <div key={s.id} className="flex items-center gap-2">
@@ -204,7 +185,6 @@ const Checkout = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main form area */}
           <div className="lg:col-span-2">
             <AnimatePresence mode="wait">
               {step === 0 && (
@@ -274,7 +254,6 @@ const Checkout = () => {
               )}
             </AnimatePresence>
 
-            {/* Navigation buttons */}
             <div className="flex justify-between mt-6">
               <Button variant="ghost" onClick={step === 0 ? () => navigate(-1) : back} className="font-mono tracking-wider text-xs">
                 <ArrowLeft className="w-4 h-4 mr-2" /> {step === 0 ? "BACK" : "PREVIOUS"}
@@ -291,7 +270,6 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Order summary sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-card border border-border rounded-lg p-6 sticky top-28 space-y-4">
               <h3 className="font-mono text-sm font-bold tracking-wider">ORDER SUMMARY</h3>

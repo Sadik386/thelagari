@@ -1,0 +1,241 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "TheLagari." [ref=e5] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - link "SHOP ALL" [ref=e7] [cursor=pointer]:
+          - /url: /products
+        - link "T-SHIRTS" [ref=e8] [cursor=pointer]:
+          - /url: /products?category=t-shirts
+        - link "HOODIES" [ref=e9] [cursor=pointer]:
+          - /url: /products?category=hoodies
+        - link "PANTS" [ref=e10] [cursor=pointer]:
+          - /url: /products?category=pants
+        - link "JACKETS" [ref=e11] [cursor=pointer]:
+          - /url: /products?category=jackets
+      - generic [ref=e12]:
+        - button "Search products" [ref=e13] [cursor=pointer]:
+          - img [ref=e14]
+        - link "Admin Dashboard" [ref=e31] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e32]
+        - link "Order history" [ref=e37] [cursor=pointer]:
+          - /url: /orders
+          - img [ref=e38]
+        - button "Sign out" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+        - button "Open shopping cart" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+  - generic [ref=e46]:
+    - generic [ref=e50]:
+      - paragraph [ref=e51]: CASUAL ESSENTIALS
+      - heading "WEAR YOUR WAY." [level=1] [ref=e52]:
+        - text: WEAR
+        - generic [ref=e53]: YOUR WAY.
+      - paragraph [ref=e54]: Everyday clothing crafted from premium materials. Comfortable, sustainable, and effortlessly stylish.
+      - generic [ref=e55]:
+        - link "SHOP NOW" [ref=e56] [cursor=pointer]:
+          - /url: /products
+          - text: SHOP NOW
+          - img
+        - link "NEW ARRIVALS" [ref=e57] [cursor=pointer]:
+          - /url: /products?category=t-shirts
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - img [ref=e63]
+        - paragraph [ref=e66]: MATERIALS
+        - paragraph [ref=e67]: Organic
+      - generic [ref=e68]:
+        - img [ref=e69]
+        - paragraph [ref=e74]: SHIPPING
+        - paragraph [ref=e75]: Free 50€+
+      - generic [ref=e76]:
+        - img [ref=e77]
+        - paragraph [ref=e79]: RETURNS
+        - paragraph [ref=e80]: 30 Days
+    - generic [ref=e82]:
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - paragraph [ref=e85]: FEATURED
+          - heading "Staff Picks" [level=2] [ref=e86]
+        - link "VIEW ALL" [ref=e87] [cursor=pointer]:
+          - /url: /products
+          - text: VIEW ALL
+          - img [ref=e88]
+      - generic [ref=e90]:
+        - link "Lightweight Bomber Jacket - front view QUICK DETAILS Material 100% Nylon Ripstop Fit Regular Weight 180gsm Origin Italy FEATURED Lightweight Bomber Jacket €79.99 Classic bomber silhouette in a lightweight fabric. STREETWEAR SMART CASUAL OUTDOOR" [ref=e93] [cursor=pointer]:
+          - /url: /product/lightweight-bomber-jacket
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - img "Lightweight Bomber Jacket - front view" [ref=e96]
+              - generic [ref=e98]:
+                - generic [ref=e99]:
+                  - img [ref=e100]
+                  - generic [ref=e103]: QUICK DETAILS
+                - generic [ref=e104]:
+                  - generic [ref=e105]:
+                    - generic [ref=e106]: Material
+                    - text: 100% Nylon Ripstop
+                  - generic [ref=e107]:
+                    - generic [ref=e108]: Fit
+                    - text: Regular
+                  - generic [ref=e109]:
+                    - generic [ref=e110]: Weight
+                    - text: 180gsm
+                  - generic [ref=e111]:
+                    - generic [ref=e112]: Origin
+                    - text: Italy
+              - generic [ref=e113]: FEATURED
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - heading "Lightweight Bomber Jacket" [level=3] [ref=e116]
+                - generic [ref=e117]: €79.99
+              - paragraph [ref=e118]: Classic bomber silhouette in a lightweight fabric.
+              - generic [ref=e119]:
+                - generic [ref=e120]: STREETWEAR
+                - generic [ref=e121]: SMART CASUAL
+                - generic [ref=e122]: OUTDOOR
+        - link "Relaxed Chino Pants - front view QUICK DETAILS Material 98% Organic Cotton Fit Relaxed Taper Weight 260gsm Origin Spain FEATURED Relaxed Chino Pants €49.99 Versatile chinos with a comfortable relaxed fit. SMART CASUAL EVERYDAY OUTDOOR" [ref=e125] [cursor=pointer]:
+          - /url: /product/relaxed-chino-pants
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - img "Relaxed Chino Pants - front view" [ref=e128]
+              - generic [ref=e130]:
+                - generic [ref=e131]:
+                  - img [ref=e132]
+                  - generic [ref=e135]: QUICK DETAILS
+                - generic [ref=e136]:
+                  - generic [ref=e137]:
+                    - generic [ref=e138]: Material
+                    - text: 98% Organic Cotton
+                  - generic [ref=e139]:
+                    - generic [ref=e140]: Fit
+                    - text: Relaxed Taper
+                  - generic [ref=e141]:
+                    - generic [ref=e142]: Weight
+                    - text: 260gsm
+                  - generic [ref=e143]:
+                    - generic [ref=e144]: Origin
+                    - text: Spain
+              - generic [ref=e145]: FEATURED
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - heading "Relaxed Chino Pants" [level=3] [ref=e148]
+                - generic [ref=e149]: €49.99
+              - paragraph [ref=e150]: Versatile chinos with a comfortable relaxed fit.
+              - generic [ref=e151]:
+                - generic [ref=e152]: SMART CASUAL
+                - generic [ref=e153]: EVERYDAY
+                - generic [ref=e154]: OUTDOOR
+        - link "Classic Pullover Hoodie - grey hoodie QUICK DETAILS Material 80% Cotton Fit Regular Weight 350gsm Origin Portugal FEATURED Classic Pullover Hoodie €59.99 Soft fleece-lined hoodie with kangaroo pocket. CASUAL LOUNGEWEAR OUTDOOR" [ref=e157] [cursor=pointer]:
+          - /url: /product/classic-pullover-hoodie
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - img "Classic Pullover Hoodie - grey hoodie" [ref=e160]
+              - generic [ref=e162]:
+                - generic [ref=e163]:
+                  - img [ref=e164]
+                  - generic [ref=e167]: QUICK DETAILS
+                - generic [ref=e168]:
+                  - generic [ref=e169]:
+                    - generic [ref=e170]: Material
+                    - text: 80% Cotton
+                  - generic [ref=e171]:
+                    - generic [ref=e172]: Fit
+                    - text: Regular
+                  - generic [ref=e173]:
+                    - generic [ref=e174]: Weight
+                    - text: 350gsm
+                  - generic [ref=e175]:
+                    - generic [ref=e176]: Origin
+                    - text: Portugal
+              - generic [ref=e177]: FEATURED
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - heading "Classic Pullover Hoodie" [level=3] [ref=e180]
+                - generic [ref=e181]: €59.99
+              - paragraph [ref=e182]: Soft fleece-lined hoodie with kangaroo pocket.
+              - generic [ref=e183]:
+                - generic [ref=e184]: CASUAL
+                - generic [ref=e185]: LOUNGEWEAR
+                - generic [ref=e186]: OUTDOOR
+        - link "Oversized Graphic Tee - front view QUICK DETAILS Material 100% Heavyweight Cotton Fit Oversized Weight 220gsm Origin Turkey FEATURED Oversized Graphic Tee €34.99 Bold oversized tee with minimalist graphic print. STREETWEAR CASUAL EVERYDAY" [ref=e189] [cursor=pointer]:
+          - /url: /product/oversized-graphic-tee
+          - generic [ref=e190]:
+            - generic [ref=e191]:
+              - img "Oversized Graphic Tee - front view" [ref=e192]
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - img [ref=e196]
+                  - generic [ref=e199]: QUICK DETAILS
+                - generic [ref=e200]:
+                  - generic [ref=e201]:
+                    - generic [ref=e202]: Material
+                    - text: 100% Heavyweight Cotton
+                  - generic [ref=e203]:
+                    - generic [ref=e204]: Fit
+                    - text: Oversized
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Weight
+                    - text: 220gsm
+                  - generic [ref=e207]:
+                    - generic [ref=e208]: Origin
+                    - text: Turkey
+              - generic [ref=e209]: FEATURED
+            - generic [ref=e210]:
+              - generic [ref=e211]:
+                - heading "Oversized Graphic Tee" [level=3] [ref=e212]
+                - generic [ref=e213]: €34.99
+              - paragraph [ref=e214]: Bold oversized tee with minimalist graphic print.
+              - generic [ref=e215]:
+                - generic [ref=e216]: STREETWEAR
+                - generic [ref=e217]: CASUAL
+                - generic [ref=e218]: EVERYDAY
+        - link "Essential Crew Tee - white cotton t-shirt QUICK DETAILS Material 100% Organic Cotton Fit Relaxed Weight 180gsm Origin Portugal FEATURED Essential Crew Tee €29.99 A timeless crew neck tee made from 100% organic cotton. CASUAL EVERYDAY LOUNGEWEAR" [ref=e221] [cursor=pointer]:
+          - /url: /product/essential-crew-tee
+          - generic [ref=e222]:
+            - generic [ref=e223]:
+              - img "Essential Crew Tee - white cotton t-shirt" [ref=e224]
+              - generic [ref=e226]:
+                - generic [ref=e227]:
+                  - img [ref=e228]
+                  - generic [ref=e231]: QUICK DETAILS
+                - generic [ref=e232]:
+                  - generic [ref=e233]:
+                    - generic [ref=e234]: Material
+                    - text: 100% Organic Cotton
+                  - generic [ref=e235]:
+                    - generic [ref=e236]: Fit
+                    - text: Relaxed
+                  - generic [ref=e237]:
+                    - generic [ref=e238]: Weight
+                    - text: 180gsm
+                  - generic [ref=e239]:
+                    - generic [ref=e240]: Origin
+                    - text: Portugal
+              - generic [ref=e241]: FEATURED
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - heading "Essential Crew Tee" [level=3] [ref=e244]
+                - generic [ref=e245]: €29.99
+              - paragraph [ref=e246]: A timeless crew neck tee made from 100% organic cotton.
+              - generic [ref=e247]:
+                - generic [ref=e248]: CASUAL
+                - generic [ref=e249]: EVERYDAY
+                - generic [ref=e250]: LOUNGEWEAR
+    - generic [ref=e252]:
+      - paragraph [ref=e253]: SUSTAINABLY MADE
+      - heading "Comfort Meets Craft" [level=2] [ref=e254]
+      - paragraph [ref=e255]: Every piece is made from responsibly sourced materials with quality construction that lasts.
+      - link "EXPLORE COLLECTION" [ref=e256] [cursor=pointer]:
+        - /url: /products
+        - text: EXPLORE COLLECTION
+        - img
+    - contentinfo [ref=e257]:
+      - generic [ref=e259]:
+        - paragraph [ref=e260]: TheLagari.
+        - paragraph [ref=e261]: © 2026 THELAGARI. ALL RIGHTS RESERVED.
